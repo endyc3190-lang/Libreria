@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librería de códigos y archivos</title>
+  <style>
+    * { box-sizing: border-box; }
+    
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --bg-light: #f8f9fa;
+      --bg-card: #ffffff;
+      --text-main: #1f2937;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    body.dark {
+      --bg-light: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border: #334155;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0; 
+      padding: 0;
+      background: var(--bg-light);
+      color: var(--text-main);
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    
+    header { 
+      text-align: center; 
+      padding: 40px 0 30px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    header h1 { margin: 0 0 8px; font-size: 28px; font-weight: 700; }
+    header p { margin: 0; opacity: 0.9; font-size: 14px; }
+    
+    .header-controls { 
+      display: flex; 
+      gap: 12px; 
+      justify-content: center; 
+      margin-top: 16px;
+    }
+
+    .card { 
+      background: var(--bg-card); 
+      border-radius: 12px; 
+      box-shadow: var(--shadow);
+      padding: 24px; 
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .card h2 { 
+      margin: 0 0 20px; 
+      font-size: 20px;
+      color: var(--text-main);
+    }
+
+    .form-group { margin-bottom: 16px; }
+    label { 
+      display: block; 
+      margin-bottom: 8px; 
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 14px;
+    }
+
+    input[type="text"], 
+    input[type="file"],
+    textarea,
+    select { 
+      width: 100%; 
+      padding: 10px 12px; 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    .button-group { 
+      display: flex; 
+      gap: 8px; 
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    button { 
+      background: var(--primary); 
+      color: white; 
+      border: none; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover { 
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    button:active { transform: translateY(0); }
+
+    button.secondary {
+      background: var(--text-secondary);
+      opacity: 0.8;
+    }
+
+    button.secondary:hover {
+      background: var(--text-secondary);
+      opacity: 1;
+    }
+
+    button.danger {
+      background: #ef4444;
+    }
+
+    button.danger:hover {
+      background: #dc2626;
+    }
+
+    button.small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .theme-toggle {
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .search-bar {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      padding-left: 36px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .list-item { 
+      border-bottom: 1px solid var(--border); 
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .list-item:last-child { border-bottom: none; }
+
+    .list-item-content { flex: 1; }
+    
+    .list-item-title { 
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: var(--text-main);
+    }
+
+    .list-item-meta { 
+      font-size: 12px; 
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .list-item pre { 
+      background: var(--bg-light);
+      padding: 12px; 
+      border-radius: 6px; 
+      overflow: auto;
+      margin: 8px 0 0;
+      font-size: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .list-item-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .file-list { list-style: none; padding: 0; margin: 0; }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: var(--bg-light);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-secondary);
+    }
+
+    .empty-message svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 22px; }
+      .header-controls { flex-direction: column; }
+      .list-item { flex-direction: column; }
+      .list-item-actions { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>📚 Librería de Códigos</h1>
+      <p>Guarda y gestiona tus snippets de código y archivos</p>
+      <div class="header-controls">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Tema</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="card">
+      <h2>Guardar snippet de código</h2>
+      <div class="form-group">
+        <label for="code-title">Título *</label>
+        <input id="code-title" type="text" placeholder="Nombre del snippet" />
+      </div>
+      <div class="form-group">
+        <label for="code-language">Lenguaje</label>
+        <select id="code-language">
+          <option value="JavaScript">JavaScript</option>
+          <option value="Python">Python</option>
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+          <option value="SQL">SQL</option>
+          <option value="Java">Java</option>
+          <option value="C++">C++</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="code-content">Código *</label>
+        <textarea id="code-content" placeholder="Escribe o pega tu código aquí..."></textarea>
+      </div>
+      <div class="button-group">
+        <button onclick="saveSnippet()">💾 Guardar snippet</button>
+        <button class="secondary" onclick="clearCodeForm()">🗑️ Limpiar</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Subir archivos</h2>
+      <div class="form-group">
+        <label for="file-upload">Seleccionar archivos</label>
+        <input id="file-upload" type="file" multiple />
+      </div>
+      <div class="button-group">
+        <button onclick="addFiles()">📤 Agregar archivos</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Snippets guardados</h2>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input id="snippet-search" type="text" placeholder="Buscar snippets..." onkeyup="filterSnippets()" />
+      </div>
+      <div id="code-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Archivos guardados</h2>
+      <div id="file-list-container"></div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY_SNIPPETS = 'library_snippets';
+    const STORAGE_KEY_FILES = 'library_files';
+
+    let snippets = JSON.parse(localStorage.getItem(STORAGE_KEY_SNIPPETS)) || [];
+    let files = JSON.parse(localStorage.getItem(STORAGE_KEY_FILES)) || [];
+
+    // Tema oscuro
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Toast notifications
+    function showToast(message, isError = false) {
+      const toast = document.createElement('div');
+      toast.className = isError ? 'toast error' : 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Guardar snippet
+    function saveSnippet() {
+      const title = document.getElementById('code-title').value.trim();
+      const language = document.getElementById('code-language').value;
+      const code = document.getElementById('code-content').value.trim();
+
+      if (!title || !code) {
+        showToast('Ingrese título y código.', true);
+        return;
+      }
+
+      // Verificar duplicado
+      if (snippets.some(s => s.title.toLowerCase() === title.toLowerCase())) {
+        showToast('Ya existe un snippet con este nombre.', true);
+        return;
+      }
+
+      snippets.unshift({ 
+        id: Date.now(), 
+        title, 
+        language, 
+        code,
+        date: new Date().toLocaleDateString('es-ES')
+      });
+
+      saveToLocalStorage();
+      clearCodeForm();
+      renderSnippets();
+      showToast('✓ Snippet guardado exitosamente');
+    }
+
+    // Limpiar formulario
+    function clearCodeForm() {
+      document.getElementById('code-title').value = '';
+      document.getElementById('code-language').value = 'JavaScript';
+      document.getElementById('code-content').value = '';
+    }
+
+    // Eliminar snippet
+    function deleteSnippet(id) {
+      if (confirm('¿Está seguro de que desea eliminar este snippet?')) {
+        snippets = snippets.filter(s => s.id !== id);
+        saveToLocalStorage();
+        renderSnippets();
+        showToast('Snippet eliminado');
+      }
+    }
+
+    // Copiar código
+    function copyCode(id) {
+      const snippet = snippets.find(s => s.id === id);
+      if (snippet) {
+        navigator.clipboard.writeText(snippet.code).then(() => {
+          showToast('✓ Código copiado al portapapeles');
+        });
+      }
+    }
+
+    // Renderizar snippets
+    function renderSnippets() {
+      const codeList = document.getElementById('code-list');
+      const searchTerm = document.getElementById('snippet-search').value.toLowerCase();
+      const filtered = snippets.filter(s => 
+        s.title.toLowerCase().includes(searchTerm) || 
+        s.language.toLowerCase().includes(searchTerm)
+      );
+
+      if (filtered.length === 0) {
+        codeList.innerHTML = '<div class="empty-message">No hay snippets guardados</div>';
+        return;
+      }
+
+      codeList.innerHTML = filtered.map(snippet => `
+        <div class="list-item">
+          <div class="list-item-content">
+            <p class="list-item-title">${snippet.title}</p>
+            <div class="list-item-meta">
+              <strong>${snippet.language}</strong> • ${snippet.date}
+            </div>
+            <pre>${snippet.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+          </div>
+          <div class="list-item-actions">
+            <button class="small" onclick="copyCode(${snippet.id})">📋 Copiar</button>
+            <button class="small danger" onclick="deleteSnippet(${snippet.id})">🗑️ Eliminar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filtrar snippets
+    function filterSnippets() {
+      renderSnippets();
+    }
+
+    // Agregar archivos
+    function addFiles() {
+      const fileUpload = document.getElementById('file-upload');
+      const selectedFiles = Array.from(fileUpload.files);
+
+      if (selectedFiles.length === 0) {
+        showToast('Selecciona al menos un archivo.', true);
+        return;
+      }
+
+      selectedFiles.forEach(file => {
+        if (!files.some(f => f.name === file.name && f.size === file.size)) {
+          files.unshift({ 
+            id: Date.now() + Math.random(), 
+            name: file.name, 
+            size: (file.size / 1024).toFixed(2),
+            type: file.type,
+            date: new Date().toLocaleDateString('es-ES')
+          });
+        }
+      });
+
+      fileUpload.value = '';
+      saveToLocalStorage();
+      renderFiles();
+      showToast('✓ Archivos agregados');
+    }
+
+    // Eliminar archivo
+    function deleteFile(id) {
+      if (confirm('¿Está seguro de que desea eliminar este archivo?')) {
+        files = files.filter(f => f.id !== id);
+        saveToLocalStorage();
+        renderFiles();
+        showToast('Archivo eliminado');
+      }
+    }
+
+    // Renderizar archivos
+    function renderFiles() {
+      const fileListContainer = document.getElementById('file-list-container');
+
+      if (files.length === 0) {
+        fileListContainer.innerHTML = '<div class="empty-message">No hay archivos agregados</div>';
+        return;
+      }
+
+      const fileList = files.map(file => `
+        <div class="file-item">
+          <div>
+            <strong>${file.name}</strong>
+            <div class="list-item-meta">${file.size} KB • ${file.date}</div>
+          </div>
+          <button class="small danger" onclick="deleteFile(${file.id})">🗑️ Eliminar</button>
+        </div>
+      `).join('');
+
+      fileListContainer.innerHTML = `<div class="file-list">${fileList}</div>`;
+    }
+
+    // Guardar en localStorage
+    function saveToLocalStorage() {
+      localStorage.setItem(STORAGE_KEY_SNIPPETS, JSON.stringify(snippets));
+      localStorage.setItem(STORAGE_KEY_FILES, JSON.stringify(files));
+    }
+
+    // Inicializar
+  </script>
+</body>
+</html>
